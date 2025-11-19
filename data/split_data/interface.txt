@@ -6,9 +6,9 @@
     <Header value="Choose text sentiment"/>
     <Choices name="sentiment" toName="text"
              choice="single" showInLine="true">
-      <Choice value="Positive"/>
-      <Choice value="Negative"/>
-      <Choice value="Neutral"/>
+      <Choice value="CLEAN"/>
+      <Choice value="OFFENSIVE"/>
+      <Choice value="HATE"/>
       <Choice value="Uncertain"/>
     </Choices>
   </View>
