@@ -4,6 +4,14 @@ import pickle
 import re
 from underthesea import word_tokenize
 import pandas as pd
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report
+)
 
 # ================= CLEAN TEXT =================
 def clean_text(text):
@@ -23,14 +31,13 @@ class BiLSTM(nn.Module):
             batch_first=True,
             bidirectional=True
         )
-        self.fc = nn.Linear(hidden_dim * 2, 1)
+        self.fc = nn.Linear(hidden_dim * 2, 3)   # ⚠️ 3 lớp
 
     def forward(self, x):
         x = self.embedding(x)
         _, (h_n, _) = self.lstm(x)
         h = torch.cat([h_n[-2], h_n[-1]], dim=1)
         return self.fc(h)
-
 
 # ================= LOAD PKL =================
 with open("checkpoints/bi_lstm_toxic.pkl", "rb") as f:
@@ -62,38 +69,60 @@ def predict(text):
     x = torch.tensor(ids, dtype=torch.long).unsqueeze(0)
 
     with torch.no_grad():
-        prob = torch.sigmoid(model(x)).item()
+        logits = model(x)                    # (1, 3)
+        probs = torch.softmax(logits, dim=1)
+        label = torch.argmax(probs, dim=1).item()
 
     return {
-        "probability": prob,
-        "label": int(prob > 0.5)
+        "probs": probs.squeeze(0).tolist(),
+        "label": label
     }
 
-
-# ================= TEST =================
-
+# ===============================
 # Load test data
+# ===============================
 df = pd.read_csv("../../data/vihsd/test.csv")
 df["free_text"] = df["free_text"].fillna("")
-
-correct = 0
-total = len(df)
 
 y_true = []
 y_pred = []
 
+# ===============================
+# Predict on test set
+# ===============================
 for _, row in df.iterrows():
     text = row["free_text"]
     true_label = int(row["label_id"])
 
-    res = predict(text)
-    pred_label = res["label"]
+    res = predict(text)              # hàm predict của bạn
+    pred_label = int(res["label"])   # đảm bảo là int
 
     y_true.append(true_label)
     y_pred.append(pred_label)
 
-    if pred_label == true_label:
-        correct += 1
+# ===============================
+# Compute metrics
+# ===============================
+accuracy  = accuracy_score(y_true, y_pred)
+precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
+recall    = recall_score(y_true, y_pred, average="macro", zero_division=0)
+f1        = f1_score(y_true, y_pred, average="macro", zero_division=0)
 
-accuracy = correct / total
-print(f"✅ Accuracy on test set: {accuracy:.4f}")
+print("📊 Evaluation on Test Set")
+print(f"✅ Accuracy : {accuracy:.4f}")
+print(f"✅ Precision: {precision:.4f}")
+print(f"✅ Recall   : {recall:.4f}")
+print(f"✅ F1-score : {f1:.4f}")
+
+# ===============================
+# Confusion Matrix
+# ===============================
+cm = confusion_matrix(y_true, y_pred)
+print("\n🧩 Confusion Matrix:")
+print(cm)
+
+# ===============================
+# Detailed report (optional but recommended)
+# ===============================
+print("\n📑 Classification Report:")
+print(classification_report(y_true, y_pred, digits=4))
