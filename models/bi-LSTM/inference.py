@@ -55,7 +55,7 @@ model = BiLSTM(
 model.load_state_dict(checkpoint["model_state_dict"])
 model.eval()
 
-print("✅ Model loaded successfully")
+print("Model loaded successfully")
 
 
 # ================= PREDICT FUNCTION =================
@@ -108,21 +108,21 @@ precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
 recall    = recall_score(y_true, y_pred, average="macro", zero_division=0)
 f1        = f1_score(y_true, y_pred, average="macro", zero_division=0)
 
-print("📊 Evaluation on Test Set")
-print(f"✅ Accuracy : {accuracy:.4f}")
-print(f"✅ Precision: {precision:.4f}")
-print(f"✅ Recall   : {recall:.4f}")
-print(f"✅ F1-score : {f1:.4f}")
+print("Evaluation on Test Set")
+print(f"Accuracy : {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall   : {recall:.4f}")
+print(f"F1-score : {f1:.4f}")
 
 # ===============================
 # Confusion Matrix
 # ===============================
 cm = confusion_matrix(y_true, y_pred)
-print("\n🧩 Confusion Matrix:")
+print("\nConfusion Matrix:")
 print(cm)
 
 # ===============================
 # Detailed report (optional but recommended)
 # ===============================
-print("\n📑 Classification Report:")
+print("\nClassification Report:")
 print(classification_report(y_true, y_pred, digits=4))

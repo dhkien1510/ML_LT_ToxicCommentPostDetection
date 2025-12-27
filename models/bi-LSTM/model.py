@@ -175,7 +175,7 @@ plt.grid(True)
 plt.savefig("accuracy_curve.png", dpi=300, bbox_inches="tight")
 plt.close()
 
-print("✅ Saved learning curves: loss_curve.png & accuracy_curve.png")
+print("Saved learning curves: loss_curve.png & accuracy_curve.png")
 
 # ===============================
 # Save model
@@ -191,4 +191,4 @@ checkpoint = {
 with open("checkpoints/bi_lstm_toxic.pkl", "wb") as f:
     pickle.dump(checkpoint, f)
 
-print("✅ Model saved at checkpoints/bi_lstm_toxic.pkl")
+print("Model saved at checkpoints/bi_lstm_toxic.pkl")
