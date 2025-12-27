@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import apiKeyMiddleware from "./middleware/auth.js"
 import accountRouter from "./routes/account.route.js"
+import predictRoute from "./routes/predict.route.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/account', apiKeyMiddleware, accountRouter);
+app.use("/predict", predictRoute);
 
 app.listen(PORT, function () {
     console.log(`Server is running on http://localhost:${PORT}`);

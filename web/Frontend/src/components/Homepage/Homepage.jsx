@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useContext } from "react";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaHistory, FaGamepad } from "react-icons/fa";
 
 export default function HomePage() {  
   const { user, logout } = useContext(AuthContext);
@@ -31,7 +31,26 @@ export default function HomePage() {
             </Link>
           </div>
         ) : (
-          <div className="flex items-center gap-4 text-gray-700">
+          <div className="flex items-center gap-6 text-gray-700">
+
+            {/* 🔹 History */}
+            <Link
+              to="/history"
+              className="flex items-center gap-1 hover:text-blue-600"
+            >
+              <FaHistory />
+              <span>History</span>
+            </Link>
+
+            {/* 🎮 Guess Game */}
+            <Link
+              to="/guess"
+              className="flex items-center gap-1 hover:text-purple-600"
+            >
+              <FaGamepad />
+              <span>Guess Game</span>
+            </Link>
+
             {/* User info */}
             <Link to="/account" className="flex items-center gap-2">
               <FaUser className="text-blue-600" />
@@ -49,6 +68,7 @@ export default function HomePage() {
           </div>
         )}
       </header>
+
 
       {/* Main content */}
       <main className="max-w-5xl mx-auto px-6 py-16 text-center">

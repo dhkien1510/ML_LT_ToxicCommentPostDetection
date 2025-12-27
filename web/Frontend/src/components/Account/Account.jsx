@@ -58,9 +58,10 @@ export default function Account() {
   const handleSaveProfile = async () => {
     try {
       const res = await updateProfile(user.id, editUser);
-      updateUser(res.data);
+      updateUser(res.data.user);
       setMessage("Profile updated successfully!");
       setIsEditing(false);
+      
     } catch (err) {
       setMessage(err.response?.data?.message || "Update failed");
     }

@@ -1,0 +1,62 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@userId = 1
+@analysisId = 1
+
+### ==============================
+### PREDICT FROM ARTICLE URL
+### ==============================
+POST {{baseUrl}}/predict
+Content-Type: {{contentType}}
+
+{
+  "type": "url",
+  "data": "https://www.facebook.com/reel/753347914167361"
+}
+
+###
+
+### ==============================
+### PREDICT FROM UPLOADED FILE
+### (giả lập file .txt / .json đã parse)
+### ==============================
+POST {{baseUrl}}/predict
+Content-Type: {{contentType}}
+
+{
+  "type": "file",
+  "data": {
+    "comments": [
+      "bài này ngu vãi",
+      "tôi ghét bài này"
+    ]
+  }
+}
+
+###
+
+### ==============================
+### INVALID INPUT TYPE (ERROR TEST)
+### ==============================
+POST {{baseUrl}}/api/predict
+Content-Type: {{contentType}}
+
+{
+  "type": "abc",
+  "data": "something"
+}
+
+
+### =========================
+### GET ANALYSIS HISTORY BY USER
+### =========================
+GET {{baseUrl}}/predict/analysis/user/{{userId}}
+Content-Type: application/json
+
+###
+
+### =========================
+### GET ANALYSIS DETAIL
+### =========================
+GET {{baseUrl}}/predict/analysis/{{analysisId}}
+Content-Type: application/json

@@ -5,7 +5,7 @@ const api = axios.create({
     baseURL: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json",
-        apikey: "KzB8mYEp53aDA7dp7idsCF0Q3tkSeX3Iaebh56sx",
+        apikey: "KzB8mYEp53aDA7dp7idsCF0Q3tkSeX3I",
     },
 });
 

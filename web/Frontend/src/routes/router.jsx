@@ -4,6 +4,10 @@ import Login from "../components/Login/Login.jsx";
 import Register from "../components/Register/Register.jsx";
 import HomePage from "../components/Homepage/Homepage.jsx";
 import Account from "../components/Account/Account.jsx";
+import Predict from "../components/Predict/Predict.jsx";
+import Detail from "../components/Detail/Detail.jsx";
+import History from "../components/History/History.jsx";
+import GuessGame from "../components/GuessGame/GuessGame.jsx";
 
 const router = createBrowserRouter([
   // ========= ROOT =========
@@ -27,6 +31,22 @@ const router = createBrowserRouter([
                 path: "/account",
                 element: <Account />
             },
+            {
+                path: "/predict",
+                element: <Predict />
+            }, 
+            {
+                path: "/history",
+                element: <History />
+            },
+            {
+                path: "/analysis/:analysisId",
+                element: <Detail />
+            },
+            {
+                path: "/guess",
+                element:<GuessGame />
+            }
         ],
     },
 ]);

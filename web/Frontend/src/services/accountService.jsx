@@ -12,15 +12,15 @@ export const loginAccount = (data) => {
 
 // GET profile
 export const getProfile = (userId) => {
-    return api.get(`/profile/${userId}`);
+    return api.get(`/account/profile/${userId}`);
 };
 
 // UPDATE profile
 export const updateProfile = (userId, data) => {
-    return api.put(`/profile/${userId}`, data);
+    return api.put(`/account/profile/${userId}`, data);
 };
 
 // CHANGE password
 export const changePassword = (userId, data) => {
-    return api.put(`/change-password/${userId}`, data);
+    return api.put(`/account/change-password/${userId}`, data);
 };
