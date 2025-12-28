@@ -1,6 +1,6 @@
 import express from "express";
 import {saveAnalysisController, predictController, getAnalysisHistoryController,
-  getAnalysisDetailController } from "../controllers/predict.controller.js";
+  getAnalysisDetailController, deleteAnalysisController } from "../controllers/predict.controller.js";
 import multer from "multer";
 
 const upload = multer({
@@ -16,6 +16,11 @@ router.post("/analysis/:id", saveAnalysisController);
 /* ================= HISTORY ================= */
 // GET /analysis/user/:userId
 router.get("/analysis/user/:userId", getAnalysisHistoryController);
+// DELETE /analysis/:analysisId
+router.delete(
+  "/analysis/:analysisId",
+  deleteAnalysisController
+);
 
 /* ================= DETAIL ================= */
 // GET /analysis/:analysisId

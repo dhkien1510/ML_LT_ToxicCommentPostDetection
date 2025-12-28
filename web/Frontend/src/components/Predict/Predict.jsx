@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pie, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -33,9 +33,11 @@ export default function Predict() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  if(!user){
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const handlePredict = async () => {
     setLoading(true);
@@ -138,6 +140,56 @@ export default function Predict() {
     ]
   };
 
+  const results = result?.results || [];
+
+  const confidences = results.map(r => r.confidence);
+
+  const avgConfidence =
+    confidences.length > 0
+      ? confidences.reduce((a, b) => a + b, 0) / confidences.length
+      : 0;
+
+  const minConfidence =
+    confidences.length > 0 ? Math.min(...confidences) : 0;
+
+  const maxConfidence =
+    confidences.length > 0 ? Math.max(...confidences) : 0;
+
+  const lowConfidence = results.filter(r => r.confidence < 0.9);
+
+  const emojiRegex = /[\u{1F300}-\u{1FAFF}]/gu;
+
+  const emojiStats = results.map(r => ({
+    text: r.text,
+    emojiCount: (r.text.match(emojiRegex) || []).length
+  }));
+
+  const avgEmoji =
+    emojiStats.length > 0
+      ? emojiStats.reduce((a, b) => a + b.emojiCount, 0) / emojiStats.length
+      : 0;
+
+
+  const lengths = results.map(r => r.text.length);
+
+  const avgLength =
+    lengths.length > 0
+      ? lengths.reduce((a, b) => a + b, 0) / lengths.length
+      : 0;
+
+  const longest =
+    lengths.length > 0 ? Math.max(...lengths) : 0;
+
+
+  const summary = result?.summary;
+
+  const verdict =
+    summary && summary.hate === 0 && summary.offensive === 0
+      ? "Very positive discussion"
+      : "Potentially toxic discussion";
+
+
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       <Back />
@@ -228,11 +280,6 @@ export default function Predict() {
               Deep Analysis
             </h2>
 
-            <p className="mb-2">
-              <span className="font-semibold">Most hateful user:</span>{" "}
-              {result.mostHateUser}
-            </p>
-
             <span className="font-semibold">Most hate and offensive words:</span>
             <div className="mt-4 overflow-x-auto">
               <table className="border border-gray-300 rounded-lg w-full text-sm">
@@ -299,7 +346,45 @@ export default function Predict() {
             </div>
           </div>
 
-          {/* ACTIONS */}
+          {/* CONFIDENCE */}
+          <div className="mt-6 p-4 bg-gray-50 rounded">
+            <h3 className="font-bold mb-2">📊 Confidence Analysis</h3>
+
+            <p>Average confidence: {(avgConfidence * 100).toFixed(2)}%</p>
+            <p>Highest confidence: {(maxConfidence * 100).toFixed(2)}%</p>
+            <p>Lowest confidence: {(minConfidence * 100).toFixed(2)}%</p>
+
+            {lowConfidence.length > 0 && (
+              <p className="text-yellow-600 mt-2">
+                ⚠ {lowConfidence.length} comments have low confidence
+              </p>
+            )}
+          </div>
+
+            {/* EMOJI */}
+            <div className="mt-6 p-4 bg-pink-50 rounded">
+              <h3 className="font-bold mb-2">😊 Emoji Usage</h3>
+              <p>Average emojis per comment: {avgEmoji.toFixed(2)}</p>
+            </div>
+
+            {/* LENGTH */}
+            <div className="mt-6 p-4 bg-blue-50 rounded">
+              <h3 className="font-bold mb-2">📏 Comment Length</h3>
+              <p>Average length: {avgLength.toFixed(1)} characters</p>
+              <p>Longest comment: {longest} characters</p>
+            </div>
+
+            {/* VERDICT */}
+            <div className="mt-6 text-center">
+              <h2 className="text-xl font-bold">
+                Overall Verdict
+              </h2>
+              <p className="mt-2 text-lg text-green-600">
+                {verdict}
+              </p>
+            </div>
+
+            {/* ACTIONS */}
           <div className="flex gap-4">
             <button
               onClick={handleDownload}

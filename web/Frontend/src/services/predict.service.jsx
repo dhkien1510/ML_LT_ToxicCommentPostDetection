@@ -17,3 +17,13 @@ export const getAnalysisHistory = (userId) =>
 
 export const getAnalysisDetail = (analysisId) =>
     api.get(`/predict/analysis/${analysisId}`);
+
+/* ================= DELETE ================= */
+export const deleteAnalysis = (analysisId, userId) => {
+    return api.delete(
+        `predict/analysis/${analysisId}`,
+        {
+            data: { userId } // gửi body cho DELETE
+        }
+    );
+};

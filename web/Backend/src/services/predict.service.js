@@ -58,6 +58,18 @@ export async function getAnalysisHistoryService(userId) {
     .orderBy("created_at", "desc");
 }
 
+/* ================= DELETE ================= */
+export async function deleteAnalysisService(analysisId, userId) {
+    const deletedRows = await db(TABLE)
+        .where({
+        id: analysisId,
+        user_id: userId
+        })
+        .del();
+
+    return deletedRows > 0;
+}
+
 /* ================= DETAIL ================= */
 export async function getAnalysisDetailService(analysisId) {
     return db(TABLE)

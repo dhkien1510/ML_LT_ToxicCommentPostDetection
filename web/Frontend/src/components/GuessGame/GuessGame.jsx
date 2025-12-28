@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Back from "../Back/Back.jsx";
 
 const LABELS = [
@@ -7,19 +7,59 @@ const LABELS = [
   { key: "hate", color: "bg-red-500" }
 ];
 
-// fake dataset – sau này lấy từ backend
-const SAMPLES = [
-  { text: "I hope you fail everything", label: "hate", confidence: 0.92 },
-  { text: "You are so stupid", label: "offensive", confidence: 0.88 },
-  { text: "Thanks for sharing this!", label: "clean", confidence: 0.97 }
-];
-
 export default function GuessGame() {
+  const [samples, setSamples] = useState([]);
   const [round, setRound] = useState(0);
   const [guess, setGuess] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
-  const sample = SAMPLES[round % SAMPLES.length];
+  // ================= LOAD CSV =================
+  useEffect(() => {
+    fetch("/data.csv")
+      .then(res => res.text())
+      .then(text => {
+        const lines = text.split("\n").slice(1);
+
+        const labelMap = {
+          "0": "clean",
+          "1": "offensive",
+          "2": "hate"
+        };
+
+        const data = lines
+          .map(line => {
+            if (!line.trim()) return null;
+
+            const lastComma = line.lastIndexOf(",");
+            if (lastComma === -1) return null;
+
+            const free_text = line.slice(0, lastComma).trim();
+            const label_id = line
+              .slice(lastComma + 1)
+              .trim()
+              .replace(/\r$/, "");
+
+            const label = labelMap[label_id];
+            if (!label) return null;
+
+            return {
+              text: free_text.replace(/^"|"$/g, ""),
+              label
+            };
+          })
+          .filter(Boolean)
+          .sort(() => Math.random() - 0.5); // shuffle
+
+        setSamples(data);
+      });
+  }, []);
+
+
+  if (samples.length === 0) {
+    return <div className="p-10 text-center">Loading dataset...</div>;
+  }
+
+  const sample = samples[round % samples.length];
 
   const handleGuess = () => {
     if (!guess) return;
@@ -36,12 +76,10 @@ export default function GuessGame() {
 
   return (
     <div className="min-h-screen relative bg-gradient-to-br from-blue-100 to-purple-200">
-      {/* BACK – luôn ở trên */}
       <div className="absolute top-6 left-6 z-10">
         <Back />
       </div>
 
-      {/* MAIN CONTENT */}
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white w-full max-w-xl p-8 rounded-2xl shadow-xl text-center">
 
@@ -95,18 +133,8 @@ export default function GuessGame() {
                 {isCorrect ? "🎉 Correct!" : "❌ Wrong guess"}
               </h2>
 
-              <p className="mb-2">
-                AI label: <b>{sample.label}</b>
-              </p>
-
-              <p className="mb-4 text-gray-600">
-                Confidence: {(sample.confidence * 100).toFixed(1)}%
-              </p>
-
-              <p className="italic mb-5">
-                {isCorrect
-                  ? "You think like the model 🤖"
-                  : "Human intuition beats AI sometimes 👀"}
+              <p className="mb-4">
+                True label: <b>{sample.label}</b>
               </p>
 
               <button
@@ -121,6 +149,5 @@ export default function GuessGame() {
         </div>
       </div>
     </div>
-
   );
 }

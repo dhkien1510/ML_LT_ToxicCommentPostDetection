@@ -11,7 +11,7 @@ Content-Type: {{contentType}}
 
 {
   "type": "url",
-  "url": "https://www.reddit.com/r/webdev/comments/1pczxyk/til_why_vite_uses_port_5173/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+  "url": "https://www.tiktok.com/@hubefananhro/video/7370488646044044551?is_from_webapp=1&sender_device=pc&web_id=7323778420071286273"
 }
 
 ###
@@ -53,6 +53,14 @@ Content-Type: {{contentType}}
 GET {{baseUrl}}/predict/analysis/user/{{userId}}
 Content-Type: application/json
 
+### Delete analysis history
+DELETE http://localhost:3000/predict/analysis/5
+Content-Type: application/json
+
+{
+  "userId": 2
+}
+
 ###
 
 ### =========================
@@ -60,3 +68,14 @@ Content-Type: application/json
 ### =========================
 GET {{baseUrl}}/predict/analysis/{{analysisId}}
 Content-Type: application/json
+
+### Get Threads comments
+GET http://127.0.0.1:8000/thread_comments?url=https://www.threads.com/@loanloanne/post/DQ2IrW8EqQ_?hl=en&limit=50
+Accept: application/json
+
+### Get TikTok comments
+GET http://127.0.0.1:8000/tiktok_comments?url=https://www.tiktok.com/@plxh.vn/video/7570050309083516191&limit=10
+Accept: application/json
+
+
+

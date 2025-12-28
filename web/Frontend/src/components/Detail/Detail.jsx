@@ -8,6 +8,7 @@ export default function Detail() {
     const { analysisId } = useParams();
     const [data, setData] = useState(null);
     const [filterLabel, setFilterLabel] = useState("all");
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         async function fetchDetail() {
@@ -23,10 +24,16 @@ export default function Detail() {
     // ✅ SAU KHI CÓ DATA MỚI DESTRUCTURE
     const { post_url, summary, top_words, raw_results } = data;
 
-    const filteredResults =
-        filterLabel === "all"
-            ? raw_results
-            : raw_results.filter(r => r.label === filterLabel);
+    const filteredResults = raw_results.filter(r => {
+        const matchLabel =
+            filterLabel === "all" || r.label === filterLabel;
+
+        const matchText =
+            r.text.toLowerCase().includes(searchText.toLowerCase());
+
+        return matchLabel && matchText;
+    });
+
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
@@ -121,10 +128,24 @@ export default function Detail() {
                 Offensive
             </button>
         </div>
+            
+        {/* SEARCH BAR */}
+        <div className="mb-4">
+            <input
+                type="text"
+                placeholder="Search comments..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+        </div>
 
         {/* COMMENTS */}
         <div>
-            <h3 className="font-semibold mb-2">All comments result</h3>
+            <h3 className="font-semibold mb-2">
+                Comments ({filteredResults.length})
+            </h3>
+
             <ul className="space-y-2">
                 {filteredResults.length === 0 && (
                     <li className="text-gray-500 text-sm">
