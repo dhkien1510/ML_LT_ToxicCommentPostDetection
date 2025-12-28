@@ -41,67 +41,37 @@ export default function Predict() {
     setLoading(true);
 
     try {
-      let payload;
+      const formData = new FormData();
 
-      // ===== URL =====
       if (inputType === "url") {
         if (!url) {
           alert("Please enter a URL");
           return;
         }
 
-        payload = {
-          type: "url",
-          data: url
-        };
-      }
-
-      // ===== FILE =====
-      else {
+        formData.append("type", "url");
+        formData.append("url", url);
+      } else {
         if (!file) {
           alert("Please upload a file");
           return;
         }
 
-        const text = await file.text();
-        let comments = [];
-
-        // .txt
-        if (file.name.endsWith(".txt")) {
-          comments = text
-            .split("\n")
-            .map(c => c.trim())
-            .filter(Boolean);
-        }
-
-        // .json
-        else if (file.name.endsWith(".json")) {
-          const json = JSON.parse(text);
-
-          // cho phép nhiều format
-          comments =
-            json.comments ||
-            json.data ||
-            json ||
-            [];
-        }
-
-        payload = {
-          type: "file",
-          data: { comments }
-        };
+        formData.append("type", "file");
+        formData.append("file", file); // 🔥 send raw file
       }
 
-      const res = await predict(payload);
+      const res = await predict(formData);
       setResult(res.data);
 
     } catch (err) {
       console.error(err);
-      alert("Prediction failed");
+      alert("Prediction failed ❌");
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleDownload = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], {
@@ -116,17 +86,22 @@ export default function Predict() {
 
   const handleSaveAnalysis = async () => {
     try {
-      await saveAnalysis(user.id, {
-        url,
-        result
-      });
+      if (inputType === "url") {
+        await saveAnalysis(user.id, {
+          url: url,
+          result: result
+        });
+      } else {
+        await saveAnalysis(user.id, {
+          url: file.name,
+          result: result
+        });
+      }
 
       alert("Analysis saved successfully ✅");
-
     } catch (err) {
       console.error(err);
       alert("Failed to save analysis ❌");
-
     }
   };
 
@@ -162,7 +137,6 @@ export default function Predict() {
       }
     ]
   };
-
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
@@ -259,19 +233,57 @@ export default function Predict() {
               {result.mostHateUser}
             </p>
 
-            <p className="mb-2">
-              <span className="font-semibold">Top hate words:</span>{" "}
-              {Object.entries(result.topWords.hate)
-                .map(([word, count]) => `${word} (${count})`)
-                .join(", ")}
-            </p>
+            <span className="font-semibold">Most hate and offensive words:</span>
+            <div className="mt-4 overflow-x-auto">
+              <table className="border border-gray-300 rounded-lg w-full text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-semibold">
+                      Category
+                    </th>
+                    {Object.keys(result.topWords.hate).map((word) => (
+                      <th
+                        key={word}
+                        className="px-4 py-2 text-center font-medium"
+                      >
+                        {word}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
 
-            <p>
-              <span className="font-semibold">Top offensive words:</span>{" "}
-              {Object.entries(result.topWords.offensive)
-                .map(([word, count]) => `${word} (${count})`)
-                .join(", ")}
-            </p>
+                <tbody>
+                  <tr className="border-t">
+                    <td className="px-4 py-2 font-semibold text-red-600">
+                      Hate
+                    </td>
+                    {Object.values(result.topWords.hate).map((count, idx) => (
+                      <td
+                        key={idx}
+                        className="px-4 py-2 text-center"
+                      >
+                        {count}
+                      </td>
+                    ))}
+                  </tr>
+
+                  <tr className="border-t">
+                    <td className="px-4 py-2 font-semibold text-orange-600">
+                      Offensive
+                    </td>
+                    {Object.values(result.topWords.offensive).map((count, idx) => (
+                      <td
+                        key={idx}
+                        className="px-4 py-2 text-center"
+                      >
+                        {count}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
 
           {/* CHARTS */}

@@ -2,50 +2,59 @@ import { predictWithPythonService, createAnalysis,  getAnalysisHistoryService,
   getAnalysisDetailService } from "../services/predict.service.js";
 import { scrapeCommentsFromUrl } from "../utils/scrape.util.js";
 
+import fs from "fs";
 
 export const predictController = async (req, res) => {
   try {
-    const { type, data } = req.body;
-
+    const { type, url } = req.body;
     let comments = [];
 
+    // ===== URL =====
     if (type === "url") {
-      comments = await scrapeCommentsFromUrl(data);
-    } 
-    else if (type === "file") {
-      comments = data.comments;
-    } 
-    else {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid input type"
-      });
+      comments = await scrapeCommentsFromUrl(url);
     }
 
-    comments = comments
-      .map(c => c?.trim())
-      .filter(c => c); // lấy text
+    // ===== FILE =====
+    else if (type === "file") {
+      const file = req.file;
+      
+      if (!file) {
+        return res.status(400).json({ message: "File missing" });
+      }
+      
+      const text = req.file.buffer.toString("utf-8");
+      
+      // .txt
+      if (file.originalname.endsWith(".txt")) {
+        comments = text
+          .split("\n")
+          .map(c => c.trim())
+          .filter(Boolean);
+      }
 
-    console.log(comments)
+      // .json
+      else if (file.originalname.endsWith(".json")) {
+        const json = JSON.parse(text);
+        comments = json.comments || json.data || json || [];
+      }
+    }
+
+    else {
+      return res.status(400).json({ message: "Invalid input type" });
+    }
+
+    // ===== CLEAN =====
+    comments = comments.map(c => c?.trim()).filter(Boolean);
 
     // ===== CALL PYTHON =====
     const pythonResponse = await predictWithPythonService(comments);
     const results = pythonResponse.results;
 
+    // ===== SUMMARY =====
     const total = results.length || 1;
+    const count = { clean: 0, hate: 0, offensive: 0 };
 
-    // ===== SUMMARY (PERCENTAGE) =====
-    const count = {
-      clean: 0,
-      hate: 0,
-      offensive: 0
-    };
-
-    results.forEach(r => {
-      if (count[r.label] !== undefined) {
-        count[r.label]++;
-      }
-    });
+    results.forEach(r => count[r.label]++);
 
     const summary = {
       clean: Math.round((count.clean / total) * 100),
@@ -53,69 +62,34 @@ export const predictController = async (req, res) => {
       offensive: Math.round((count.offensive / total) * 100)
     };
 
-    // ===== MOST HATE USER =====
-    const hateByUser = {};
-
-    results.forEach((r, idx) => {
-      if (r.label === "hate" && comments[idx]?.author?.name) {
-        const user = comments[idx].author.name;
-        hateByUser[user] = (hateByUser[user] || 0) + 1;
-      }
-    });
-
-    const mostHateUser =
-      Object.entries(hateByUser).sort((a, b) => b[1] - a[1])[0]?.[0] ||
-      "N/A";
-
     // ===== TOP WORDS =====
-    const extractWords = (label) => {
-      return results
+    const countWords = (label) => {
+      const freq = {};
+      results
         .filter(r => r.label === label)
-        .flatMap(r =>
+        .forEach(r => {
           r.text
             .toLowerCase()
             .split(/\W+/)
             .filter(w => w.length > 4)
-        )
-        .slice(0, 5);
-    };
-
-    const countWords = (label) => {
-    const freq = {};
-
-    results
-      .filter(r => r.label === label)
-      .forEach(r => {
-        r.text
-          .toLowerCase()
-          .split(/\W+/)
-          .filter(w => w.length > 4)
-          .forEach(w => {
-            freq[w] = (freq[w] || 0) + 1;
-          });
-      });
-
+            .forEach(w => {
+              freq[w] = (freq[w] || 0) + 1;
+            });
+        });
       return freq;
     };
 
-    const topWords = {
-      hate: countWords("hate"),
-      offensive: countWords("offensive")
-    };
-
-    // ===== RESPONSE MATCH FRONTEND =====
     return res.json({
       summary,
-      mostHateUser,
-      topWords,
+      topWords: {
+        hate: countWords("hate"),
+        offensive: countWords("offensive")
+      },
       results
     });
 
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    });
+    return res.status(500).json({ message: error.message });
   }
 };
 

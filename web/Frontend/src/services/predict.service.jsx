@@ -1,7 +1,11 @@
 import api from "./api.js";
 
-export const predict = (data) => {
-    return api.post("/predict", data);
+export const predict = (formData) => {
+    return api.post("/predict", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
 };
 
 export const saveAnalysis = (userId, payload) => {

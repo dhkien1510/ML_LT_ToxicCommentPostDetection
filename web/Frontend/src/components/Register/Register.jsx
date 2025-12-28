@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { registerAccount } from "../../services/accountService.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Back from "../Back/Back.jsx";
+
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -15,11 +16,15 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await registerAccount(form);
       alert("Register success!");
+      navigate("/");
+
     } catch (err) {
       alert(err.response?.data?.message || "Register failed");
     }

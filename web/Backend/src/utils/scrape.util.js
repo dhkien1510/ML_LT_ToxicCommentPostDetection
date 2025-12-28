@@ -1,37 +1,28 @@
-import axios from "axios";
+import { ApifyClient } from "apify-client";
 import dotenv from "dotenv";
 
 dotenv.config({ path: "./src/.env" });
 
-export async function scrapeCommentsFromUrl(postUrl, cursor = null) {
-  const API_KEY = process.env.API_KEY;
+export async function scrapeCommentsFromUrl(postUrl) {
+  const client = new ApifyClient({
+    token: process.env.APIFY_TOKEN,
+  });
 
-  try {
-    const apiUrl = "https://api.scrapecreators.com/v1/facebook/post/comments";
+  const input = {
+    startUrls: [{ url: postUrl }],
+    maxComments: 500,       // lấy bao nhiêu comment
+    includeNestedComments: true,
+    commentsOrder: "RANKED_UNFILTERED"
+  };
 
-    const response = await axios.get(apiUrl, {
-      headers: {
-        "x-api-key": API_KEY,
-        "Content-Type": "application/json"
-      },
-      params: {
-        url: postUrl,
-        cursor: cursor
-      }
-    });
+  const run = await client.actor("apify/facebook-comments-scraper").call(input);
 
-    // console.log("Response:", response.data);
-    
-    const result = [];
+  const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
-    for (const comment of response.data.comments) {
-      result.push(comment.text);
-    }
+  // chỉ lấy text
+  const comments = items.map(item => item.text).filter(Boolean);
 
-    return result;
+  console.log("Total comments:", comments.length);
 
-  } catch (error) {
-    console.error("Error:", error.response?.data || error.message);
-  }
+  return comments;
 }
-
