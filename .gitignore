@@ -123,27 +123,27 @@ dmypy.json
 .pyre/
 
 # ML/Data Science specific
-*.pkl
-*.pickle
-*.joblib
-*.h5
-*.hdf5
-*.npz
-models/
-checkpoints/
-logs/
-tensorboard_logs/
-wandb/
-mlruns/
+# *.pkl
+# *.pickle
+# *.joblib
+# *.h5
+# *.hdf5
+# *.npz
+# models/
+# checkpoints/
+# logs/
+# tensorboard_logs/
+# wandb/
+# mlruns/
 
 # Data files
-data/
-dataset/
-datasets/
-*.csv
-*.tsv
-*.json
-*.parquet
+# data/
+# dataset/
+# datasets/
+# *.csv
+# *.tsv
+# *.json
+# *.parquet
 
 # IDE
 .vscode/

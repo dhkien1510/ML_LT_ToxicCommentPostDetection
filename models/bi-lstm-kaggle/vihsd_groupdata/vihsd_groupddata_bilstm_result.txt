@@ -1,0 +1,36 @@
+ Bắt đầu huấn luyện 15 Epochs...
+Epoch 01/15 | Train Loss: 0.5574 Acc: 0.6899 | Val Loss: 0.8975 Acc: 0.6538
+  --> New Best Model! (Loss giảm từ inf xuống 0.8975)
+Epoch 02/15 | Train Loss: 0.3035 Acc: 0.8425 | Val Loss: 0.8113 Acc: 0.7930
+  --> New Best Model! (Loss giảm từ inf xuống 0.8113)
+Epoch 03/15 | Train Loss: 0.2092 Acc: 0.8901 | Val Loss: 0.8668 Acc: 0.7534
+Epoch 04/15 | Train Loss: 0.1516 Acc: 0.9187 | Val Loss: 0.9501 Acc: 0.8035
+Epoch 05/15 | Train Loss: 0.1323 Acc: 0.9304 | Val Loss: 0.9924 Acc: 0.7968
+Epoch 06/15 | Train Loss: 0.0892 Acc: 0.9502 | Val Loss: 1.1781 Acc: 0.7900
+Epoch 07/15 | Train Loss: 0.0707 Acc: 0.9606 | Val Loss: 1.2391 Acc: 0.7784
+Epoch 08/15 | Train Loss: 0.0658 Acc: 0.9643 | Val Loss: 1.3084 Acc: 0.8147
+Epoch 09/15 | Train Loss: 0.0509 Acc: 0.9714 | Val Loss: 1.5118 Acc: 0.8151
+Epoch 10/15 | Train Loss: 0.0448 Acc: 0.9757 | Val Loss: 1.5725 Acc: 0.8084
+Epoch 11/15 | Train Loss: 0.0443 Acc: 0.9763 | Val Loss: 1.5522 Acc: 0.8110
+Epoch 12/15 | Train Loss: 0.0353 Acc: 0.9815 | Val Loss: 1.7098 Acc: 0.7953
+Epoch 13/15 | Train Loss: 0.0341 Acc: 0.9819 | Val Loss: 1.6458 Acc: 0.8174
+Epoch 14/15 | Train Loss: 0.0305 Acc: 0.9843 | Val Loss: 1.6539 Acc: 0.7874
+Epoch 15/15 | Train Loss: 0.0307 Acc: 0.9839 | Val Loss: 1.6985 Acc: 0.7930
+
+ Kết thúc huấn luyện.
+Đang khôi phục lại trạng thái tốt nhất (Best Val Loss: 0.8113)...
+
+ĐỘ CHÍNH XÁC (ACCURACY): 79.30%
+
+--- BÁO CÁO CHI TIẾT TỪNG LỚP ---
+               precision    recall  f1-score   support
+
+    Clean (0)       0.94      0.84      0.89      2190
+Offensive (1)       0.32      0.47      0.38       212
+     Hate (2)       0.46      0.67      0.54       270
+
+     accuracy                           0.79      2672
+    macro avg       0.57      0.66      0.60      2672
+ weighted avg       0.84      0.79      0.81      2672
+
+F1-Score Macro: 0.6025

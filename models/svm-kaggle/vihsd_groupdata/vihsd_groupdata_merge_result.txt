@@ -1,0 +1,14 @@
+ĐỐI VỚI DATASET VIHSD_GROUPDATA_MERGE
+
+ ĐỘ CHÍNH XÁC (ACCURACY): 82.01%
+
+--- CHI TIẾT TỪNG LỚP ---
+               precision    recall  f1-score   support
+
+    Clean (0)       0.94      0.88      0.91      5548
+Offensive (1)       0.31      0.44      0.36       444
+     Hate (2)       0.48      0.61      0.54       688
+
+     accuracy                           0.82      6680
+    macro avg       0.58      0.64      0.60      6680
+ weighted avg       0.85      0.82      0.83      6680

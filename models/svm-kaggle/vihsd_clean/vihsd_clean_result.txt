@@ -1,0 +1,13 @@
+ĐỐI VỚI DATASET VIHSD_CLEAN
+ĐỘ CHÍNH XÁC (ACCURACY): 82.41%
+
+--- CHI TIẾT TỪNG LỚP ---
+               precision    recall  f1-score   support
+
+    Clean (0)       0.93      0.89      0.91      5548
+Offensive (1)       0.33      0.41      0.37       444
+     Hate (2)       0.48      0.59      0.53       688
+
+     accuracy                           0.82      6680
+    macro avg       0.58      0.63      0.60      6680
+ weighted avg       0.84      0.82      0.83      6680
