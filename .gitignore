@@ -19,4 +19,4 @@ __pycache__/
 Thumbs.db
 
 # DVC
-/data
+# /data
