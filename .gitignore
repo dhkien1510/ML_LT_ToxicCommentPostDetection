@@ -1,4 +1,22 @@
-# Ignore file chứa thông tin nhạy cảm
+# Virtual environments
+.venv/
+vev/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Thông tin nhạy cảm
 .env
 
-# Ignore các tệp lưu trữ dữ liệu sinh ra (nếu cần)
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# DVC
+/data
