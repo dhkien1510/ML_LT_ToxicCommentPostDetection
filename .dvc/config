@@ -2,3 +2,6 @@
     remote = dagshub
 ['remote "dagshub"']
     url = https://dagshub.com/dhkien1510/ML_toxic_comment_detection.dvc
+    auth = basic
+    user = dhkien1510
+    password = 8512d145e0fc3d2b747a8a5dd44cbf2e4973a934
