@@ -1,11 +1,11 @@
-# 🛡️ Toxic Comment Post Detection
+# Toxic Comment Post Detection
 
 > **Đồ án Nhập môn Học máy — 23KHMT1**  
 > Phân loại bình luận độc hại trên mạng xã hội tiếng Việt bằng Machine Learning & Deep Learning.
 
 ---
 
-## 📋 Tổng quan
+## Tổng quan
 
 Đồ án xây dựng pipeline hoàn chỉnh từ **thu thập & gán nhãn dữ liệu** đến **huấn luyện & đánh giá mô hình** để phân loại bình luận tiếng Việt vào 3 mức độ:
 
@@ -17,7 +17,7 @@
 
 ---
 
-## 📊 Kết quả chính
+## Kết quả chính
 
 Ba mô hình được huấn luyện và so sánh trên cùng tập dữ liệu:
 
@@ -40,7 +40,7 @@ Ba mô hình được huấn luyện và so sánh trên cùng tập dữ liệu:
   </tr>
 </table>
 
-> 📄 Chi tiết phân tích kết quả, learning curve và nhận xét → xem [**MODEL_REPORT.md**](MODEL_REPORT.md)
+> 📄 Chi tiết phân tích kết quả, learning curve và nhận xét → xem [**MODEL_REPORT.md**](doc/MODEL_REPORT.md)
 
 ---
 
@@ -72,14 +72,14 @@ ML_LT_ToxicCommentPostDetection/
 
 Đồ án gồm hai phần chính, mỗi phần có báo cáo riêng:
 
-### 1. [📄 DATA_REPORT.md](DATA_REPORT.md) — Dữ liệu
+### 1. [📄 DATA_REPORT.md](doc/DATA_REPORT.md) — Dữ liệu
 
 - **Nguồn**: ~6.600 comments tự thu thập từ Facebook, YouTube, TikTok, Threads
 - **Phương pháp**: Web scraping + thu thập thủ công
 - **Quy trình gán nhãn**: 3 annotators + Cohen Kappa (κ > 0.5)
 - **Tiền xử lý**: Loại nhiễu, loại trùng, chuẩn hóa, word segmentation
 
-### 2. [📄 MODEL_REPORT.md](MODEL_REPORT.md) — Mô hình
+### 2. [📄 MODEL_REPORT.md](doc/MODEL_REPORT.md) — Mô hình
 
 - **SVD + Logistic Regression**: Phương pháp truyền thống (TF-IDF → SVD → LR)
 - **Bi-LSTM**: Deep learning với Bidirectional LSTM
@@ -88,7 +88,7 @@ ML_LT_ToxicCommentPostDetection/
 
 ---
 
-## 🚀 Cài đặt & Sử dụng
+## Cài đặt & Sử dụng
 
 ### Yêu cầu
 - Python 3.12+
