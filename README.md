@@ -79,7 +79,7 @@ ML_LT_ToxicCommentPostDetection/
 - **Quy trình gán nhãn**: 3 annotators + Cohen Kappa (κ > 0.5)
 - **Tiền xử lý**: Loại nhiễu, loại trùng, chuẩn hóa, word segmentation
 
-### 2. [📄 MODEL_REPORT.md](doc/MODEL_REPORT.md) — Mô hình
+### 2. [📄 MODEL_REPORT.md](MODEL_REPORT.md) — Mô hình
 
 - **SVD + Logistic Regression**: Phương pháp truyền thống (TF-IDF → SVD → LR)
 - **Bi-LSTM**: Deep learning với Bidirectional LSTM
@@ -121,5 +121,5 @@ Mỗi mô hình được triển khai trong notebook riêng tại `models_v2/fin
 | Tên | Vai trò |
 |-----|---------|
 | Kiên | Thu thập dữ liệu, dán nhãn, huấn luyện mô hình |
-| Thái | Thu thập dữ liệu, dán nhãn, huấn luyện mô hình |
-| Vũ | Thu thập dữ liệu, dán nhãn, huấn luyện mô hình |
+| Thái | Dán nhãn |
+| Vũ |  Dán nhãn |
