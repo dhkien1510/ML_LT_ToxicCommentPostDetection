@@ -1,0 +1,6 @@
+# Nội dung file .pipreqsignore
+venv/
+.venv/
+data/
+datasets/
+__pycache__/
