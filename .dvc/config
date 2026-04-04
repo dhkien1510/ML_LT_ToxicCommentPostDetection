@@ -1,4 +1,4 @@
 [core]
-    remote = origin
-['remote "origin"']
+    remote = dagshub
+['remote "dagshub"']
     url = https://dagshub.com/dhkien1510/ML_toxic_comment_detection.dvc
